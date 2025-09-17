@@ -8,15 +8,20 @@ require_once 'includes/database.php';
 $module = _MODULES;
 $action = _ACTIONS;
 
-$data = [
-    'name' => 'Marketing',
-    'slug' => 'marketing',
-];
+// $data = [
+//     'fullname' => 'Trần Văn Lộc',
+//     'email' => 'namlun12333@gmail.com',
+//     'phone'=> '0123456789',
+//     'address' => 'Hà Nội',
+// ];
 
-// insertData('course_category', $data);
-$condition = "id=1";
-updateData('course_category', $data, $condition);
-
+// insertData('user', $data);
+$condition = "id=2";
+// delete('user', $condition);
+echo lastID();
+// updateData('course_category', $data, $condition);
+$rel = getRows("SELECT * FROM user");
+echo $rel;
 // $rel =  getAll("SELECT * FROM course");
 
 // echo '<pre>';
@@ -43,3 +48,5 @@ if (!empty($path)) {
 } else {
     require_once 'modules/errors/500.php';
 }
+
+

@@ -23,7 +23,15 @@ function getOne($sql)
     $result = $stm->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
-
+//đếm số dòng trả về
+function getRows($sql)
+{
+    global $conn;
+    $stm = $conn->prepare($sql);
+    $stm->execute();
+    $result = $stm->rowCount();
+    return $result;
+}
 //insert dữ liệu
 
 function insertData($table, $data)
@@ -41,7 +49,7 @@ function insertData($table, $data)
     $keys = array_keys($data); //lấy ra các key của mảng
     // echo $keys;
     $cot = implode(',', $keys); //chuyển mảng thành chuỗi
-    $place = ':'. implode(',:', $keys);
+    $place = ':' . implode(',:', $keys);
     echo $cot;
     echo $place;
     $sql = "INSERT INTO $table ($cot) VALUES($place)";
@@ -50,26 +58,41 @@ function insertData($table, $data)
     // $name = "Nguyen Van A";
     // $stm -> execute([':name' => $name]);
     $stm->execute($data);
-
-
 }
 
-function updateData($table, $data, $condition='')
+function updateData($table, $data, $condition = '')
 {
     global $conn;
-    $update="";
-    foreach($data as $key => $value){
-        $update .= $key. "=:" . $key.',';
+    $update = "";
+    foreach ($data as $key => $value) {
+        $update .= $key . "=:" . $key . ',';
     }
-    $update = rtrim($update,',');
-  
-    if(!empty($condition)){
+    $update = rtrim($update, ',');
+
+    if (!empty($condition)) {
         $sql = "UPDATE $table SET  $update WHERE $condition";
-    }else{
+    } else {
         $sql = "UPDATE $table SET  $update";
-    } 
-     echo $sql;
-        $tmp = $conn->prepare($sql);
-         $tmp -> execute($data);
+    }
+    echo $sql;
+    $tmp = $conn->prepare($sql);
+    $tmp->execute($data);
 }
-  
+
+function delete($table, $condition)
+{
+    global $conn;
+    if (!empty($condition)) {
+        $sql = "DELETE FROM $table WHERE $condition";
+    } else {
+        $sql = "DELETE FROM $table";
+    }
+
+    $tmp = $conn->prepare($sql);
+    $tmp->execute();
+}
+//ham lấy dòng dl mới insert
+function lastID(){
+    global $conn;
+    return $conn->lastInsertId();
+}
